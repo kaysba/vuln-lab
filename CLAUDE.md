@@ -9,14 +9,25 @@ au pentest. Elle contient plusieurs modules de failles, chacun avec 3 niveaux
 de difficulté (easy / medium / hard). Usage strictement local, jamais exposée
 sur Internet.
 
+## Stack
+
+- PHP 8 + Apache (image officielle `php:8.x-apache`)
+- MySQL 8
+- Docker Compose : un service `web`, un service `db`
+- Pas de framework PHP : du PHP simple, pour que les failles restent lisibles
+
 ## État actuel
 
-Dépôt au tout début : seuls `README.md` et `.gitignore` existent. Pas encore
-de code, de stack, ni de commandes de build/test. La stack sera choisie à
-l'étape de conception, puis ajoutée ici.
+Stack choisie, pas encore de code. L'architecture et les commandes
+(build, lancement, reset de la base) seront ajoutées ici après la planification.
 
-Le `.gitignore` prévoit : `venv/`, `.venv/`, `__pycache__/`, `node_modules/`,
-`*.db`, `*.sqlite3`, `.env`, `uploads/`. Ne jamais commiter ces éléments.
+## Règles Docker
+
+- Les ports sont publiés uniquement sur la boucle locale :
+  `127.0.0.1:8080:80`, jamais `8080:80`.
+- La base MySQL n'est pas publiée sur l'hôte (accessible seulement depuis `web`).
+- Identifiants de la base dans `.env` (ignoré), avec un `.env.example` commité.
+- La base doit pouvoir être remise à zéro par un script d'initialisation.
 
 ## Environnement
 
@@ -26,7 +37,7 @@ Le `.gitignore` prévoit : `venv/`, `.venv/`, `__pycache__/`, `node_modules/`,
 ## Règles de code
 
 - Tout code volontairement vulnérable est marqué :
-  `# VULN: <type> - level <easy|medium|hard>`
+  `// VULN: <type> - level <easy|medium|hard>`
 - Ne jamais corriger ni "sécuriser" un code marqué `VULN`, sauf demande explicite.
 - Un module de faille = un dossier, avec sa page, sa logique et sa correction documentée.
 - Uniquement des données factices : jamais de vrais secrets ni de vraies données.
