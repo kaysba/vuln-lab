@@ -1,37 +1,37 @@
 # vuln-lab
 
-Application web **volontairement vulnérable** (un petit forum) pour s'entraîner au pentest.
-Cinq modules de failles, chacun avec 3 niveaux : easy / medium / hard.
+An **intentionally vulnerable** web application (a small forum) to practice pentesting.
+Five vulnerability modules, each with 3 levels: easy / medium / hard.
 
-> ⚠️ **Avertissement** : ce code contient des failles réelles et exploitables.
-> À lancer uniquement en local, sur `127.0.0.1`. Ne jamais déployer sur Internet
-> ni sur un réseau partagé.
+> ⚠️ **Warning**: this code contains real, exploitable vulnerabilities.
+> Run it locally only, on `127.0.0.1`. Never deploy it on the Internet
+> or on a shared network.
 
 ## Stack
 
-PHP 8 + Apache, MySQL 8, lancés avec Docker Compose.
+PHP 8 + Apache, MySQL 8, run with Docker Compose.
 
 ## Modules
 
-| # | Module | Faille |
+| # | Module | Vulnerability |
 |---|---|---|
-| 1 | Connexion | Injection SQL, authentification faible |
-| 2 | Profils et messages privés | IDOR |
-| 3 | Recherche | XSS reflétée |
-| 4 | Posts et commentaires | XSS stockée |
-| 5 | Panneau d'administration | Contrôle d'accès cassé |
+| 1 | Login | SQL injection, weak authentication |
+| 2 | Profiles and private messages | IDOR |
+| 3 | Search | Reflected XSS |
+| 4 | Posts and comments | Stored XSS |
+| 5 | Admin panel | Broken access control |
 
-## Lancement
+## Getting started
 
-1. Copier `.env.example` en `.env` et changer les valeurs (mots de passe, `FLAG_SECRET`).
-2. Lancer : `docker compose up --build -d`
-3. Ouvrir http://127.0.0.1:8080
-4. Logs : `docker compose logs -f web` (ou `db`)
-5. Arrêter : `docker compose down`
-6. Tout remettre à zéro (base comprise) : `docker compose down -v`
+1. Copy `.env.example` to `.env` and change the values (passwords, `FLAG_SECRET`).
+2. Start: `docker compose up --build -d`
+3. Open http://127.0.0.1:8080
+4. Logs: `docker compose logs -f web` (or `db`)
+5. Stop: `docker compose down`
+6. Reset everything (database included): `docker compose down -v`
 
-L'application n'écoute que sur 127.0.0.1 (boucle locale) : elle n'est pas accessible depuis le réseau, et ne doit jamais être exposée sur Internet.
+The application only listens on 127.0.0.1 (loopback): it is not reachable from the network, and must never be exposed to the Internet.
 
 ## Writeups
 
-Un writeup par module dans `docs/writeups/` : la faille, l'exploitation, la correction.
+One writeup per module in `docs/writeups/`: the vulnerability, the exploitation, the fix.
