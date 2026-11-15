@@ -1,6 +1,6 @@
 <?php
-// Remise à zéro de la base. Garde la table progress, refait tout le reste.
-require __DIR__ . '/config/db.php';
+// Database reset. Keeps the progress table, rebuilds everything else.
+require __DIR__ . '/config/bootstrap.php';
 
 const DB_SCRIPTS_DIR = '/var/www/db';
 const TABLES_TO_DROP = ['comments', 'messages', 'posts', 'progress', 'users'];
@@ -36,7 +36,7 @@ function run_sql_file(mysqli $conn, string $path): bool
 
 function reset_database(mysqli $conn): ?array
 {
-    // a. Sauvegarde de la progression
+    // a. Save progress
     $res = $conn->query('SELECT module, level, solved_at FROM progress');
     if (!$res) {
         return null;
@@ -44,7 +44,7 @@ function reset_database(mysqli $conn): ?array
     $saved = $res->fetch_all(MYSQLI_ASSOC);
     $res->free();
 
-    // b. Drop + schéma + données
+    // b. Drop + schema + data
     $ok = $conn->query('SET FOREIGN_KEY_CHECKS=0');
     foreach (TABLES_TO_DROP as $table) {
         $ok = $ok && $conn->query('DROP TABLE IF EXISTS `' . $table . '`');
@@ -57,7 +57,7 @@ function reset_database(mysqli $conn): ?array
         return null;
     }
 
-    // c. Restauration de la progression
+    // c. Restore progress
     $stmt = $conn->prepare('INSERT INTO progress (module, level, solved_at) VALUES (?, ?, ?)');
     if (!$stmt) {
         return null;
@@ -71,7 +71,7 @@ function reset_database(mysqli $conn): ?array
     }
     $stmt->close();
 
-    // d. Chiffres pour le message de succès
+    // d. Numbers for the success message
     $users = $conn->query('SELECT COUNT(*) FROM users');
     $posts = $conn->query('SELECT COUNT(*) FROM posts');
     if (!$users || !$posts) {
@@ -87,7 +87,7 @@ $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 if ($method !== 'GET' && $method !== 'POST') {
     http_response_code(405);
     header('Allow: GET, POST');
-    exit('Méthode non autorisée');
+    exit('Method not allowed');
 }
 
 $message = '';
@@ -99,37 +99,34 @@ if ($method === 'POST') {
         $stats = reset_database(db());
         if ($stats === null) {
             http_response_code(500);
-            $message = 'La remise à zéro a échoué.';
+            $message = 'The reset failed.';
         } else {
             $success = true;
-            $message = 'Base remise à zéro : ' . $stats['users'] . ' utilisateurs, '
-                . $stats['posts'] . ' posts. Progression conservée.';
+            $message = 'Database reset: ' . $stats['users'] . ' users, '
+                . $stats['posts'] . ' posts. Progress kept.';
         }
     } else {
-        $message = 'Confirmation incorrecte : tapez exactement RESET. Rien n\'a été modifié.';
+        $message = 'Wrong confirmation: type exactly RESET. Nothing was changed.';
     }
 }
 ?>
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="utf-8">
-    <title>vuln-lab - Remise à zéro</title>
-</head>
-<body>
-    <h1>Remise à zéro de la base</h1>
-    <?php if ($message !== ''): ?>
-        <p><strong><?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?></strong></p>
-    <?php endif; ?>
-    <?php if (!$success): ?>
-        <p><strong>Attention :</strong> les utilisateurs, posts, commentaires et messages seront remis à leur état initial. Vos modifications seront perdues. La progression (flags validés) est conservée.</p>
-        <form method="post" action="reset.php">
-            <label>Tapez RESET pour confirmer :
-                <input type="text" name="confirm" autocomplete="off">
-            </label>
-            <button type="submit">Remettre à zéro</button>
-        </form>
-    <?php endif; ?>
-    <p><a href="index.php">Retour à l'accueil</a></p>
-</body>
-</html>
+<?php
+$pageTitle = 'Database reset';
+$activeNav = '';
+require __DIR__ . '/includes/header.php';
+?>
+<h1>Database reset</h1>
+<?php if ($message !== ''): ?>
+    <p class="<?php echo $success ? 'msg ok' : 'msg err'; ?>"><strong><?php echo e($message); ?></strong></p>
+<?php endif; ?>
+<?php if (!$success): ?>
+    <p><strong>Warning:</strong> users, posts, comments and messages will be restored to their initial state. Your changes will be lost. Progress (validated flags) is kept.</p>
+    <form method="post" action="/reset.php" class="resetform">
+        <label>Type RESET to confirm:
+            <input type="text" name="confirm" autocomplete="off">
+        </label>
+        <button type="submit">RESET DATABASE</button>
+    </form>
+<?php endif; ?>
+<p><a href="/index.php">Back to feed</a></p>
+<?php require __DIR__ . '/includes/footer.php'; ?>
