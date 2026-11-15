@@ -4,9 +4,8 @@ $pageTitle = $pageTitle ?? 'vuln-lab';
 $activeNav = $activeNav ?? '';
 $level = get_level();
 $flagCount = 0;
-$fres = db()->query('SELECT COUNT(*) FROM progress');
-if ($fres) {
-    $flagCount = (int) $fres->fetch_row()[0];
+foreach (solved_map() as $solvedLevels) {
+    $flagCount += count($solvedLevels);
 }
 $docroot = dirname(__DIR__);
 $navItems = [

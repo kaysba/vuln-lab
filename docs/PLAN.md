@@ -43,7 +43,7 @@ Writeups are written by me (see `docs/writeups/TEMPLATE.md`).
       Validation: after changing data, the reset restores the initial state.
 - [x] `feature/layout-and-level`: header, footer, sober dark CSS, `config/level.php`,
       global selector. Validation: the chosen level persists during the session.
-- [ ] `feature/flags-progress`: `flags.php` + progress page.
+- [x] `feature/flags-progress`: `flags.php` + progress page.
       Validation: a valid flag is marked solved, a wrong one is rejected.
 - [ ] `feature/auth-login-sqli`: module 1, 3 levels. Then `docs/writeup-login-sqli`.
 - [ ] `feature/idor-profile-messages`: module 2. Then `docs/writeup-idor`.

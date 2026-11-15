@@ -12,6 +12,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 require_once __DIR__ . '/db.php';
 require_once __DIR__ . '/level.php';
+require_once __DIR__ . '/flags.php';
 
 function e(string $s): string
 {

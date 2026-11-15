@@ -54,13 +54,84 @@
   var sound = {
     tick: function () { tone(1400, 0, 0.03, 'square', 0.03); },
     blip: function () { tone(660, 0, 0.06, 'square', VOL); tone(990, 0.07, 0.08, 'square', VOL); },
-    buzz: function () { tone(90, 0, 0.3, 'sawtooth', 0.08); tone(95, 0, 0.3, 'square', 0.04); },
+    buzz: function () { resume(); tone(90, 0, 0.3, 'sawtooth', 0.08); tone(95, 0, 0.3, 'square', 0.04); },
     success: function () {
       [392, 494, 587, 784].forEach(function (f, i) { tone(f, i * 0.08, 0.12, 'triangle', 0.06); });
     },
-    type: function () { noise(0, 0.015, 0.012); tone(2000 + Math.random() * 400, 0, 0.012, 'square', 0.008); }
+    type: function () { noise(0, 0.015, 0.012); tone(2000 + Math.random() * 400, 0, 0.012, 'square', 0.008); },
+    breakin: function () {
+      resume();
+      tone(300, 0, 0.6, 'sawtooth', 0.05, 900);
+      tone(900, 0.6, 0.6, 'sawtooth', 0.05, 300);
+      noise(0, 0.5, 0.05);
+      [392, 494, 587, 784].forEach(function (f, i) { tone(f, 1.7 + i * 0.1, 0.14, 'triangle', 0.06); });
+    }
   };
-  window.VulnLab = { sound: sound };
+
+  /* Break-in sequence: slow red pulse (well under 3 flashes/s), overlay, fake logs, skippable. */
+  function breakIn(done) {
+    var over = document.createElement('div');
+    over.id = 'breakin';
+    over.setAttribute('role', 'dialog');
+    over.setAttribute('aria-label', 'System hacked');
+    var title = document.createElement('div');
+    title.className = 'bi-title';
+    title.setAttribute('aria-label', 'SYSTEM HACKED');
+    var logs = document.createElement('div');
+    logs.className = 'bi-logs';
+    var hint = document.createElement('div');
+    hint.className = 'bi-hint';
+    hint.textContent = '[click or Esc to skip]';
+    over.appendChild(title); over.appendChild(logs); over.appendChild(hint);
+    document.body.appendChild(over);
+    if (!reduced) over.classList.add('pulse');
+
+    var finished = false, timers = [];
+    function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
+    function finish() {
+      if (finished) return;
+      finished = true;
+      timers.forEach(clearTimeout);
+      document.removeEventListener('keydown', onKey, true);
+      over.classList.add('fade');
+      setTimeout(function () {
+        if (over.parentNode) over.parentNode.removeChild(over);
+        if (done) done();
+      }, reduced ? 0 : 250);
+    }
+    function onKey(ev) { if (ev.key === 'Escape') finish(); }
+    document.addEventListener('keydown', onKey, true);
+    over.addEventListener('click', finish);
+
+    var msg = 'SYSTEM HACKED';
+    var lines = ['> access granted', '> root shell opened', '> flag captured'];
+    if (reduced) {
+      title.textContent = msg;
+      logs.textContent = lines.join('\n');
+      later(finish, 1200);
+      return;
+    }
+    sound.breakin();
+    var i = 0;
+    (function typeNext() {
+      if (finished) return;
+      if (i <= msg.length) {
+        title.textContent = msg.slice(0, i);
+        if (i > 0) title.classList.toggle('glitch', i % 4 === 0);
+        i++;
+        later(typeNext, 70);
+      } else {
+        title.classList.remove('glitch');
+      }
+    })();
+    lines.forEach(function (l, k) {
+      later(function () { logs.appendChild(document.createTextNode(l + '\n')); sound.type(); }, 1000 + k * 380);
+    });
+    later(finish, 2900);
+  }
+  window.VulnLab = { sound: sound, breakIn: breakIn };
+
+  var breakInPending = false;
 
   var sndBtn = null;
   function renderSnd() {
@@ -138,7 +209,27 @@
       });
     });
 
+    /* flag page: break-in on a newly captured flag, shake + buzz on a wrong one */
+    var okPanel = document.querySelector('[data-breakin="1"]');
+    if (okPanel) {
+      breakInPending = true;
+      okPanel.hidden = true;
+      breakIn(function () {
+        okPanel.hidden = false;
+        sound.success();
+      });
+    }
+    var badInput = document.querySelector('input[data-denied="1"]');
+    if (badInput) {
+      sound.buzz();
+      if (!reduced) {
+        badInput.classList.add('shake');
+        badInput.addEventListener('animationend', function () { badInput.classList.remove('shake'); });
+      }
+    }
+
     /* boot sequence, once per browser session */
+    if (breakInPending) return;
     var seen = false;
     try { seen = sessionStorage.getItem('vulnlab_boot') === '1'; } catch (e) {}
     if (seen || reduced) return;
