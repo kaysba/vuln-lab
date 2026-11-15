@@ -5,6 +5,7 @@ services:
       - "127.0.0.1:8080:80"
     volumes:
       - ./src:/var/www/html
+      - ./db:/var/www/db:ro
     environment:
       DB_HOST: db
       DB_NAME: ${DB_NAME}
