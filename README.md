@@ -23,7 +23,14 @@ PHP 8 + Apache, MySQL 8, lancés avec Docker Compose.
 
 ## Lancement
 
-(à compléter après la tâche `chore/scaffold-docker`)
+1. Copier `.env.example` en `.env` et changer les valeurs (mots de passe, `FLAG_SECRET`).
+2. Lancer : `docker compose up --build -d`
+3. Ouvrir http://127.0.0.1:8080
+4. Logs : `docker compose logs -f web` (ou `db`)
+5. Arrêter : `docker compose down`
+6. Tout remettre à zéro (base comprise) : `docker compose down -v`
+
+L'application n'écoute que sur 127.0.0.1 (boucle locale) : elle n'est pas accessible depuis le réseau, et ne doit jamais être exposée sur Internet.
 
 ## Writeups
 

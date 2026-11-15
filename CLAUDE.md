@@ -114,7 +114,11 @@ Escalade :
 
 ## Commandes
 
-À compléter après la tâche `chore/scaffold-docker` (build, lancement, reset, logs).
+- Config : `cp .env.example .env` puis changer les valeurs.
+- Build + lancement : `docker compose up --build -d`, puis http://127.0.0.1:8080
+- Logs : `docker compose logs -f web` (ou `db`)
+- Arrêt : `docker compose down`
+- Remise à zéro complète de la base : `docker compose down -v`
 
 ## Mise à jour de ce fichier
 
