@@ -21,12 +21,14 @@ function vulnerable_login(string $level, string $username, string $password, str
     $db = db();
     $row = null;
     $error = null;
+    // easy and medium honour the login_by choice through a strict whitelist; hard uses it raw
+    $col = $loginBy === 'email' ? 'email' : 'username';
     try {
         switch ($level) {
             case 'easy':
                 // VULN: SQL injection - level easy (string concatenation, no escaping)
                 // VULN: weak auth - level easy (unsalted MD5, no rate limiting)
-                $sql = "SELECT id, username, role FROM users WHERE username = '$username' AND password = MD5('$password') LIMIT 1";
+                $sql = "SELECT id, username, role FROM users WHERE $col = '$username' AND password = MD5('$password') LIMIT 1";
                 $res = $db->query($sql);
                 if ($res === false) {
                     // VULN: SQL injection - level easy (verbose errors)
@@ -41,9 +43,10 @@ function vulnerable_login(string $level, string $username, string $password, str
                 // VULN: weak auth - level medium (unsalted MD5 computed in PHP, no rate limiting)
                 $u = login_blacklist($username);
                 $p = md5($password);
-                $sql = "SELECT id, username, role FROM users WHERE username = '$u' AND password = '$p' LIMIT 1";
+                $sql = "SELECT id, username, role FROM users WHERE $col = '$u' AND password = '$p' LIMIT 1";
                 $res = $db->query($sql);
                 if ($res === false) {
+                    // VULN: SQL injection - level medium (error oracle: SQL error and no match give different messages)
                     $error = 'Login failed.';
                 } else {
                     $row = $res->fetch_assoc() ?: null;
@@ -56,6 +59,7 @@ function vulnerable_login(string $level, string $username, string $password, str
                 // VULN: weak auth - level hard (unsalted MD5, no rate limiting)
                 $sql = "SELECT id, username, role FROM users WHERE $loginBy = ? AND password = MD5(?) LIMIT 1";
                 $stmt = $db->prepare($sql);
+                // VULN: SQL injection - level hard (error oracle: SQL error and no match give different messages)
                 if ($stmt === false) {
                     $error = 'Login failed.';
                     break;
@@ -70,27 +74,28 @@ function vulnerable_login(string $level, string $username, string $password, str
                 $stmt->close();
                 break;
         }
-    } catch (mysqli_sql_exception $ex) {
-        // VULN: SQL injection - level easy (verbose errors, only shown on easy)
+    } catch (\Throwable $ex) {
+        // Any DB or bind error ends here; the raw message is only shown on easy (see the VULN above).
         $error = $level === 'easy' ? $ex->getMessage() : 'Login failed.';
         $row = null;
     }
     return [$row, $error];
 }
 
-// Safe check: are the submitted credentials genuinely valid for an admin account?
-function genuine_admin(string $username, string $password): bool
+// Safe check: does the submitted password really match the stored hash of the returned account?
+// Independent of the identifier, so email logins and filtered usernames are handled too.
+function genuine_password(int $userId, string $password): bool
 {
-    $stmt = db()->prepare('SELECT id, role FROM users WHERE username = ? AND password = MD5(?)');
+    $stmt = db()->prepare('SELECT id FROM users WHERE id = ? AND password = MD5(?)');
     if ($stmt === false) {
         return false;
     }
-    $stmt->bind_param('ss', $username, $password);
+    $stmt->bind_param('is', $userId, $password);
     $stmt->execute();
     $res = $stmt->get_result();
     $found = $res ? $res->fetch_assoc() : null;
     $stmt->close();
-    return is_array($found) && $found['role'] === 'admin';
+    return is_array($found);
 }
 
 $error = null;
@@ -113,7 +118,7 @@ if ($method === 'POST') {
         $_SESSION['role'] = (string) $row['role'];
         $_SESSION['auth_level'] = $level;
         $error = null;
-        if ($row['role'] === 'admin' && !genuine_admin($username, $password)) {
+        if ($row['role'] === 'admin' && !genuine_password((int) $row['id'], $password)) {
             $loginFlag = flag_for('login-sqli', $level);
             $loginFlagLevel = $level;
         }
