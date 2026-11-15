@@ -51,7 +51,7 @@ $requestUri = (string) ($_SERVER['REQUEST_URI'] ?? '/');
     </div>
     <div class="status">
         <button type="button" id="snd-toggle" class="snd" aria-pressed="true">[SND: ON]</button>
-        <div class="user">USER: <?php echo isset($_SESSION['username']) && is_string($_SESSION['username']) ? e($_SESSION['username']) : 'guest'; ?></div>
+        <div class="user">USER: <?php echo isset($_SESSION['username']) && is_string($_SESSION['username']) ? '<a href="/profile.php">' . e($_SESSION['username']) . '</a>' : 'guest'; ?></div>
         <div class="flags">FLAGS <?php echo sprintf('%02d', $flagCount); ?>/15</div>
     </div>
 </header>
