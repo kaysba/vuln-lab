@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Maquette C - Mainframe / DEFCON</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Silkscreen&display=swap">
+<style>
+  :root { --bg:#0b0f0c; --text:#c8f7c5; --accent:#39ff88; --danger:#ff3b3b; --warn:#ffb000; --dim:#5f7d5c; --line:#1d2a1f; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:15px/1.6 "IBM Plex Mono", monospace; padding:20px 28px; }
+  body::after { content:""; position:fixed; inset:0; pointer-events:none;
+    background:repeating-linear-gradient(0deg, rgba(0,0,0,.18) 0 1px, transparent 1px 3px); }
+  pre.banner { color:var(--accent); margin:0; font-size:11px; line-height:1.15; }
+  .top { display:grid; grid-template-columns:auto 1fr auto; gap:32px; align-items:end; border-bottom:2px solid var(--accent); padding-bottom:12px; }
+  .defcon { font-family:Silkscreen, monospace; }
+  .defcon .t { color:var(--dim); font-size:12px; }
+  .gauge { display:flex; gap:4px; margin-top:4px; }
+  .gauge div { width:92px; padding:6px 8px; border:1px solid var(--line); font-size:13px; cursor:pointer; }
+  .gauge .e.on { background:var(--accent); color:var(--bg); border-color:var(--accent); }
+  .gauge .m { color:var(--warn); }
+  .gauge .h { color:var(--danger); }
+  .snd { color:var(--dim); font-size:13px; text-align:right; }
+  nav { margin:14px 0 22px; }
+  nav a { color:var(--text); text-decoration:none; margin-right:22px; }
+  nav a .n { color:var(--accent); }
+  nav a.on { background:var(--accent); color:var(--bg); padding:0 4px; }
+  nav a.on .n { color:var(--bg); }
+  nav a:hover:not(.on)::before { content:"\2588"; color:var(--accent); animation:blink 1s steps(1) infinite; }
+  h1 { font-family:Silkscreen, monospace; font-weight:400; font-size:26px; color:var(--accent); margin:0 0 14px; }
+  .post { display:grid; grid-template-columns:110px 1fr; gap:16px; padding:10px 0; border-bottom:1px dashed var(--line); max-width:880px; }
+  .post .who { color:var(--accent); }
+  .post .who small { display:block; color:var(--dim); }
+  footer { margin-top:24px; color:var(--dim); font-size:13px; }
+  @keyframes blink { 50% { opacity:0; } }
+</style>
+</head>
+<body>
+<div class="top">
+<pre class="banner"> _   _ _   _ _     _   _       _       _    ____
+| | | | | | | |   | \ | |     | |     / \  | __ )
+| | | | | | | |   |  \| |_____| |    / _ \ |  _ \
+| |_| | |_| | |___| |\  |_____| |___/ ___ \| |_) |
+ \___/ \___/|_____|_| \_|     |_____/_/   \_\____/</pre>
+  <div class="defcon">
+    <div class="t">THREAT LEVEL</div>
+    <div class="gauge"><div class="e on">EASY</div><div class="m">MEDIUM</div><div class="h">HARD</div></div>
+  </div>
+  <div class="snd">[SND: ON]<br>FLAGS 00/15</div>
+</div>
+<nav>
+  <a class="on" href="#"><span class="n">[1]</span> FIL</a><a href="#"><span class="n">[2]</span> RECHERCHE</a><a href="#"><span class="n">[3]</span> MESSAGES</a><a href="#"><span class="n">[4]</span> ADMIN</a><a href="#"><span class="n">[F]</span> FLAGS</a>
+</nav>
+<h1>Fil d'actualite</h1>
+<div class="post"><div class="who">admin<small>14:02</small></div><div><b>Bienvenue sur le forum</b><br>Merci de rester courtois et de lire les regles avant de poster.</div></div>
+<div class="post"><div class="who">alice<small>13:40</small></div><div><b>Quel editeur utilisez-vous ?</b><br>J'hesite entre VS Code et un editeur en terminal.</div></div>
+<div class="post"><div class="who">bob<small>12:11</small></div><div><b>Mon premier homelab</b><br>J'ai monte un petit serveur avec un vieux PC.</div></div>
+<footer>// usage local uniquement - 127.0.0.1 - ne jamais exposer</footer>
+</body>
+</html>

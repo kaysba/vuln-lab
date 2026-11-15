@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Maquette A - Shell</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=VT323&display=swap">
+<style>
+  :root { --bg:#0b0f0c; --text:#c8f7c5; --accent:#39ff88; --danger:#ff3b3b; --warn:#ffb000; --dim:#5f7d5c; --line:#1d2a1f; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:15px/1.6 "IBM Plex Mono", monospace; }
+  body::after { content:""; position:fixed; inset:0; pointer-events:none;
+    background:repeating-linear-gradient(0deg, rgba(0,0,0,.18) 0 1px, transparent 1px 3px); }
+  header { border-bottom:1px solid var(--line); padding:10px 24px; display:flex; gap:28px; align-items:baseline; flex-wrap:wrap; }
+  .brand { font-family:VT323, monospace; font-size:34px; color:var(--accent); letter-spacing:1px; }
+  .prompt { color:var(--dim); }
+  .prompt b { color:var(--accent); font-weight:600; }
+  nav a { color:var(--text); text-decoration:none; margin-right:18px; }
+  nav a.on { background:var(--accent); color:var(--bg); padding:0 4px; }
+  nav a:hover::before { content:"\2588"; color:var(--accent); animation:blink 1s steps(1) infinite; margin-right:2px; }
+  .bar { margin-left:auto; display:flex; gap:18px; }
+  .threat { color:var(--dim); }
+  .threat button { background:none; border:1px solid var(--line); color:var(--text); font:inherit; padding:0 8px; cursor:pointer; }
+  .threat .easy.on { border-color:var(--accent); color:var(--bg); background:var(--accent); }
+  .threat .medium:hover { border-color:var(--warn); color:var(--warn); }
+  .threat .hard:hover { border-color:var(--danger); color:var(--danger); }
+  .snd { color:var(--dim); }
+  main { padding:24px; max-width:900px; }
+  h1 { font-family:VT323, monospace; font-weight:400; font-size:44px; color:var(--accent); margin:0 0 4px; }
+  .sub { color:var(--dim); margin-bottom:24px; }
+  .log { border-left:2px solid var(--line); padding-left:16px; }
+  .entry { padding:10px 0; border-bottom:1px dashed var(--line); }
+  .entry .meta { color:var(--dim); font-size:13px; }
+  .entry .meta b { color:var(--accent); font-weight:400; }
+  .entry h2 { font-size:16px; margin:2px 0; font-weight:600; }
+  footer { padding:16px 24px; color:var(--dim); font-size:13px; border-top:1px solid var(--line); }
+  @keyframes blink { 50% { opacity:0; } }
+</style>
+</head>
+<body>
+<header>
+  <span class="brand">VULN-LAB</span>
+  <span class="prompt">guest@vuln-lab:<b>~/feed</b>$</span>
+  <nav>
+    <a class="on" href="#">./feed</a><a href="#">./search</a><a href="#">./messages</a><a href="#">./admin</a><a href="#">./flags</a>
+  </nav>
+  <div class="bar">
+    <span class="threat">THREAT
+      <button class="easy on">EASY</button><button class="medium">MEDIUM</button><button class="hard">HARD</button>
+    </span>
+    <span class="snd">[SND: ON]</span>
+  </div>
+</header>
+<main>
+  <h1>&gt; fil d'actualite_</h1>
+  <div class="sub">12 entrees // derniere activite il y a 3 min</div>
+  <div class="log">
+    <div class="entry"><div class="meta">[2026-11-15 14:02] <b>admin</b></div><h2>Bienvenue sur le forum</h2>Merci de rester courtois et de lire les regles avant de poster.</div>
+    <div class="entry"><div class="meta">[2026-11-15 13:40] <b>alice</b></div><h2>Quel editeur utilisez-vous ?</h2>J'hesite entre VS Code et un editeur en terminal. Vos retours ?</div>
+    <div class="entry"><div class="meta">[2026-11-15 12:11] <b>bob</b></div><h2>Mon premier homelab</h2>J'ai monte un petit serveur avec un vieux PC.</div>
+  </div>
+</main>
+<footer>vuln-lab // usage local uniquement // 127.0.0.1 // session: guest</footer>
+</body>
+</html>

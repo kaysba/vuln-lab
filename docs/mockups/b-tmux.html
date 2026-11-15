@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Maquette B - Ops room (tmux)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Major+Mono+Display&display=swap">
+<style>
+  :root { --bg:#0b0f0c; --text:#c8f7c5; --accent:#39ff88; --danger:#ff3b3b; --warn:#ffb000; --dim:#5f7d5c; --line:#1d2a1f; }
+  * { box-sizing:border-box; }
+  html, body { height:100%; }
+  body { margin:0; background:var(--bg); color:var(--text); font:14px/1.6 "IBM Plex Mono", monospace;
+    display:grid; grid-template-columns:230px 1fr; grid-template-rows:1fr 26px; }
+  body::after { content:""; position:fixed; inset:0; pointer-events:none;
+    background:repeating-linear-gradient(0deg, rgba(0,0,0,.16) 0 1px, transparent 1px 3px); }
+  aside { border-right:1px solid var(--accent); padding:18px 0; }
+  .brand { font-family:"Major Mono Display", monospace; color:var(--accent); font-size:22px; padding:0 18px 18px; }
+  .pane-title { color:var(--dim); font-size:12px; padding:0 18px; margin:14px 0 4px; }
+  aside a { display:block; color:var(--text); text-decoration:none; padding:3px 18px; }
+  aside a .k { color:var(--dim); margin-right:8px; }
+  aside a.on { background:var(--accent); color:var(--bg); }
+  aside a.on .k { color:var(--bg); }
+  aside a:hover:not(.on)::before { content:"\2588 "; color:var(--accent); animation:blink 1s steps(1) infinite; }
+  .threat { padding:0 18px; }
+  .lvl { display:flex; justify-content:space-between; border:1px solid var(--line); padding:2px 8px; margin:4px 0; cursor:pointer; }
+  .lvl.on { border-color:var(--accent); color:var(--accent); }
+  .lvl.m:hover { border-color:var(--warn); color:var(--warn); }
+  .lvl.h:hover { border-color:var(--danger); color:var(--danger); }
+  main { padding:22px 32px; overflow:auto; }
+  h1 { font-family:"Major Mono Display", monospace; font-weight:400; font-size:30px; color:var(--accent); margin:0 0 18px; }
+  table { border-collapse:collapse; width:100%; max-width:860px; }
+  td { padding:8px 10px 8px 0; border-bottom:1px solid var(--line); vertical-align:top; }
+  td.who { color:var(--accent); width:90px; }
+  td.when { color:var(--dim); width:150px; font-size:13px; }
+  .status { grid-column:1 / -1; background:var(--accent); color:var(--bg); display:flex; gap:24px; padding:0 12px; font-size:13px; align-items:center; }
+  .status .r { margin-left:auto; }
+  @keyframes blink { 50% { opacity:0; } }
+</style>
+</head>
+<body>
+<aside>
+  <div class="brand">vuln-lab</div>
+  <div class="pane-title">-- modules --</div>
+  <a class="on" href="#"><span class="k">0</span>feed</a>
+  <a href="#"><span class="k">1</span>login</a>
+  <a href="#"><span class="k">2</span>messages</a>
+  <a href="#"><span class="k">3</span>search</a>
+  <a href="#"><span class="k">4</span>posts</a>
+  <a href="#"><span class="k">5</span>admin</a>
+  <a href="#"><span class="k">F</span>flags</a>
+  <div class="pane-title">-- threat level --</div>
+  <div class="threat">
+    <div class="lvl on"><span>EASY</span><span>[x]</span></div>
+    <div class="lvl m"><span>MEDIUM</span><span>[ ]</span></div>
+    <div class="lvl h"><span>HARD</span><span>[ ]</span></div>
+  </div>
+</aside>
+<main>
+  <h1>fil d'actualite</h1>
+  <table>
+    <tr><td class="when">2026-11-15 14:02</td><td class="who">admin</td><td><b>Bienvenue sur le forum</b><br>Merci de rester courtois et de lire les regles avant de poster.</td></tr>
+    <tr><td class="when">2026-11-15 13:40</td><td class="who">alice</td><td><b>Quel editeur utilisez-vous ?</b><br>J'hesite entre VS Code et un editeur en terminal.</td></tr>
+    <tr><td class="when">2026-11-15 12:11</td><td class="who">bob</td><td><b>Mon premier homelab</b><br>J'ai monte un petit serveur avec un vieux PC.</td></tr>
+  </table>
+</main>
+<div class="status"><span>[0] feed*</span><span>THREAT: EASY</span><span>FLAGS: 0/15</span><span class="r">[SND: ON]  guest@127.0.0.1</span></div>
+</body>
+</html>

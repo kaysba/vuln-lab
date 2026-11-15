@@ -25,3 +25,6 @@ Thumbs.db
 
 # Graphe graphify (généré localement)
 graphify-out/
+
+# Captures Playwright (local)
+.playwright-mcp/
