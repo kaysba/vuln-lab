@@ -5,7 +5,12 @@ services:
       - "127.0.0.1:8080:80"
     volumes:
       - ./src:/var/www/html
-    env_file: .env
+    environment:
+      DB_HOST: db
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASS}
+      FLAG_SECRET: ${FLAG_SECRET}
     depends_on:
       db:
         condition: service_healthy
@@ -19,8 +24,9 @@ services:
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASS}
     volumes:
       - db_data:/var/lib/mysql
+      - ./db:/docker-entrypoint-initdb.d:ro
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p${DB_ROOT_PASS}"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-p${DB_ROOT_PASS}"]
       interval: 5s
       timeout: 5s
       retries: 20
