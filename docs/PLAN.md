@@ -49,7 +49,7 @@ Writeups are written by me (see `docs/writeups/TEMPLATE.md`).
 - [x] `feature/auth-login-sqli`: module 1, 3 levels. Then `docs/writeup-login-sqli`.
 - [x] `feature/idor-profile-messages`: module 2. Then `docs/writeup-idor`.
 - [x] `feature/xss-reflected-search`: module 3. Then `docs/writeup-xss-reflected`.
-- [ ] `feature/xss-stored-posts`: module 4. Then `docs/writeup-xss-stored`.
+- [x] `feature/xss-stored-posts`: module 4. Then `docs/writeup-xss-stored`.
 - [ ] `feature/admin-access-control`: module 5. Then `docs/writeup-admin-access`.
 - [ ] `docs/update-claude-md`: real commands in CLAUDE.md and README, screenshots.
 - [ ] Release `v0.1.0`: clean clone, `docker compose up`, checklist, PR `dev` -> `main`,
