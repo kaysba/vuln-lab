@@ -9,9 +9,10 @@ Les writeups sont écrits par moi (voir `docs/writeups/TEMPLATE.md`).
 - Stack : PHP 8 + Apache, MySQL 8, Docker Compose, pas de framework.
 - Port `127.0.0.1:8080:80` uniquement. MySQL non publié.
 - Niveau de difficulté stocké uniquement en session (`easy` par défaut). Pas de table `config`.
-- Flags : jamais lisibles par l'utilisateur MySQL de l'appli vulnérable, dérivés de
-  `FLAG_SECRET` (`.env`), jamais en clair dans `db/`. Mécanisme exact (base séparée
-  avec utilisateur dédié, ou calcul à partir du secret) à confirmer dans la tâche 2.
+- Flags : calculés à la volée en PHP par HMAC-SHA256(`FLAG_SECRET`, module + niveau),
+  jamais stockés (ni en base, ni dans `db/`, ni dans le code). La base ne contient que
+  la progression. `web` ne reçoit pas le mot de passe root MySQL. L'utilisateur MySQL
+  de l'appli n'a des droits que sur sa base (pas de privilège FILE).
 - Mots de passe en MD5 sans sel pour tous les comptes (volontaire).
 - `reset.php` : POST uniquement, avec confirmation.
 - mysqli pour le code vulnérable, PDO dans les correctifs des writeups.
@@ -30,8 +31,8 @@ Les writeups sont écrits par moi (voir `docs/writeups/TEMPLATE.md`).
 
 ## Roadmap
 
-- [ ] `docs/project-plan` : ce kit (CLAUDE.md, agents, PLAN.md, README, .gitignore)
-- [ ] `chore/scaffold-docker` : docker-compose, Dockerfile, `src/index.php` minimal.
+- [x] `docs/project-plan` : ce kit (CLAUDE.md, agents, PLAN.md, README, .gitignore)
+- [x] `chore/scaffold-docker` : docker-compose, Dockerfile, `src/index.php` minimal.
       Validation : `docker compose up --build` affiche la page sur 127.0.0.1:8080,
       et le port n'est pas joignable depuis une autre machine.
 - [ ] `chore/db-schema-seed` : schéma (users, posts, comments, messages, progress),
