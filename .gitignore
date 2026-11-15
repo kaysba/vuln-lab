@@ -22,3 +22,6 @@ docs/solutions-privees/
 Thumbs.db
 .vscode/
 .idea/
+
+# Graphe graphify (généré localement)
+graphify-out/
