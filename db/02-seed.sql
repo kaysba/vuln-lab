@@ -2,7 +2,7 @@
 SET NAMES utf8mb4;
 
 INSERT INTO users (id, username, email, password, role, bio) VALUES
-(1, 'admin', 'admin@vuln-lab.local', '0d107d09f5bbe40cade3de5c71e9e9b7', 'admin', 'Forum administrator. I moderate, I don''t bite.'),
+(1, 'admin', 'admin@vuln-lab.local', '967177dfc90f47c16e36930d521ff096', 'admin', 'Forum administrator. I moderate, I don''t bite.'),
 (2, 'alice', 'alice@vuln-lab.local', '7c6a180b36896a0a8c02787eeafb0e4c', 'user', 'Web developer, into PHP and coffee.'),
 (3, 'bob', 'bob@vuln-lab.local', 'd8578edf8458ce06fbc5bb76a58c5ca4', 'user', 'Networking student, I tinker with homelabs.'),
 (4, 'carol', 'carol@vuln-lab.local', 'e10adc3949ba59abbe56e057f20f883e', 'user', 'I test anything that has a button.'),
