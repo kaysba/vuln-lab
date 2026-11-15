@@ -45,3 +45,7 @@ INSERT INTO messages (sender_id, recipient_id, subject, body) VALUES
 (1, 3, 'Sunday maintenance', 'Bob, could you help me test the forum after the maintenance?'),
 (3, 5, 'Borrowed book', 'Dave, I''ll give you back your networking book on Tuesday.'),
 (6, 1, 'Email address change', 'Hello, I''d like to change my email address, how do I do that?');
+
+-- Sensitive message received by admin (IDOR target of module 2).
+INSERT INTO messages (sender_id, recipient_id, subject, body) VALUES
+(6, 1, 'Confidential: staging credentials', 'Admin, as requested here are the staging notes. Please delete this message after reading it.');
