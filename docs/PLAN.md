@@ -19,12 +19,13 @@ Writeups are written by me (see `docs/writeups/TEMPLATE.md`).
 - XSS: the flag is in a non-HttpOnly cookie, to be retrieved by running JavaScript.
 - 5 modules x 3 levels = 15 flags.
 - The whole app is in English (pages, comments, seed data, docs).
+- Login flag is awarded only in the login request itself, for the level captured at that moment, when the vulnerable path returns admin and the real credentials are not valid. Modules 2 and 5 never use "session is admin" as their win condition.
 
 ## Modules and levels
 
 | Module | easy | medium | hard |
 |---|---|---|---|
-| 1. Login (SQLi + weak auth) | concatenated query, plain-text password in the comparison | naive filtering that can be bypassed | almost parameterized, one field stays vulnerable |
+| 1. Login (SQLi + weak auth) | concatenated query, MD5 compared in SQL, verbose errors | naive filtering that can be bypassed | prepared statement, one non-credential field concatenated as an identifier |
 | 2. Profiles / private messages (IDOR) | no owner check | bypassable check (editable parameter or identifier) | check present but incomplete on one endpoint |
 | 3. Search (reflected XSS) | input echoed as is | bypassable filter | correct escaping except one forgotten context |
 | 4. Posts / comments (stored XSS) | content stored and displayed raw | bypassable sanitizing | allowlist with one dangerous attribute allowed |
