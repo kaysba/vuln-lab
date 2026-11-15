@@ -1,30 +1,30 @@
-# Secrets et config locale
+# Secrets and local config
 .env
 
 # PHP
 vendor/
 
-# Données Docker / base
+# Docker / database data
 db_data/
 *.sql.gz
 
-# Uploads éventuels
+# Possible uploads
 uploads/
 
-# Solutions privées (testeur) : ne jamais versionner
-docs/solutions-privees/
+# Private solutions (tester): never version
+docs/private-solutions/
 
-# Claude Code : config locale (les agents dans .claude/agents/ sont versionnés)
+# Claude Code: local config (agents in .claude/agents/ are versioned)
 .claude/settings.local.json
 
-# Système / éditeur
+# OS / editor
 .DS_Store
 Thumbs.db
 .vscode/
 .idea/
 
-# Graphe graphify (généré localement)
+# graphify graph (generated locally)
 graphify-out/
 
-# Captures Playwright (local)
+# Playwright screenshots (local)
 .playwright-mcp/

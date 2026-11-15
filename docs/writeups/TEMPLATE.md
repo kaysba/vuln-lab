@@ -1,30 +1,30 @@
-# Writeup : <module>
+# Writeup: <module>
 
-Écrit par moi. Un writeup par module, avec les 3 niveaux.
+Written by me. One writeup per module, covering the 3 levels.
 
-## Résumé
-La faille en deux phrases, et où elle se trouve dans le forum.
+## Summary
+The vulnerability in two sentences, and where it lives in the forum.
 
-## Niveau easy
-- Comportement observé :
-- Comment je l'ai trouvée :
-- Exploitation (preuve : requête, capture) :
-- Pourquoi ça marche (extrait de code, marqué VULN) :
+## Easy level
+- Observed behavior:
+- How I found it:
+- Exploitation (proof: request, screenshot):
+- Why it works (code excerpt, marked VULN):
 
-## Niveau medium
-- Protection en place :
-- Comment je l'ai contournée :
-- Pourquoi elle était insuffisante :
+## Medium level
+- Protection in place:
+- How I bypassed it:
+- Why it was not enough:
 
-## Niveau hard
-- Protection en place :
-- Le défaut subtil :
-- Exploitation :
+## Hard level
+- Protection in place:
+- The subtle flaw:
+- Exploitation:
 
-## Correctif
-Le code corrigé (PDO, échappement, contrôle d'accès...) et pourquoi il règle le problème.
+## Fix
+The fixed code (PDO, escaping, access control...) and why it solves the problem.
 
-## Gravité
-Impact, facilité d'exploitation, score CVSS si pertinent.
+## Severity
+Impact, ease of exploitation, CVSS score if relevant.
 
-## Ce que j'ai appris
+## What I learned

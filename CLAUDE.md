@@ -1,126 +1,127 @@
 # CLAUDE.md
 
-Instructions pour Claude Code sur ce dépôt.
+Instructions for Claude Code on this repository.
 
-## But du projet
+## Project goal
 
-vuln-lab est une application web volontairement vulnérable (un petit forum) pour
-m'entraîner au pentest. Chaque faille vit dans une vraie fonctionnalité du forum,
-avec 3 niveaux de difficulté (easy / medium / hard) choisis par un sélecteur global.
-Usage strictement local, jamais exposée sur Internet.
+vuln-lab is an intentionally vulnerable web application (a small forum) for me
+to practice pentesting. Each vulnerability lives in a real forum feature, with
+3 difficulty levels (easy / medium / hard) chosen through a global selector.
+Strictly local use, never exposed to the Internet.
 
-Le plan détaillé et la roadmap sont dans `docs/PLAN.md`. C'est la référence.
+The detailed plan and the roadmap are in `docs/PLAN.md`. It is the reference.
 
 ## Stack
 
-- PHP 8 + Apache (image officielle `php:8.x-apache`), extension mysqli
+- PHP 8 + Apache (official `php:8.x-apache` image), mysqli extension
 - MySQL 8
-- Docker Compose : services `web` et `db`
-- Pas de framework PHP : du PHP simple, pour que les failles restent lisibles
-- mysqli pour le code vulnérable. PDO uniquement dans les correctifs des writeups.
+- Docker Compose: `web` and `db` services
+- No PHP framework: plain PHP, so the vulnerabilities stay readable
+- mysqli for vulnerable code. PDO only in the writeup fixes.
 
-## Arborescence cible
+## Target tree
 
 ```
 vuln-lab/
 ├── CLAUDE.md
 ├── README.md
-├── .env.example            # valeurs factices, le vrai .env n'est jamais commité
+├── .env.example            # dummy values, the real .env is never committed
 ├── docker-compose.yml
 ├── docker/web/Dockerfile
-├── db/                     # schéma et données factices, joués au 1er démarrage
+├── db/                     # schema and fake data, run on first start
 ├── docs/
 │   ├── PLAN.md
-│   └── writeups/           # écrits par moi, voir TEMPLATE.md
-├── .claude/agents/         # conseiller, codeur, testeur, mecanique
-└── src/                    # racine web servie par Apache
+│   └── writeups/           # written by me, see TEMPLATE.md
+├── .claude/agents/         # advisor, coder, tester, mechanic
+└── src/                    # web root served by Apache
     ├── config/             # db.php, level.php, bootstrap.php
-    ├── includes/           # header.php (nav + sélecteur de niveau), footer.php
+    ├── includes/           # header.php (nav + level selector), footer.php
     ├── assets/style.css
-    ├── index.php           # fil d'actualité
-    ├── login.php           # module 1 : injection SQL + authentification faible
-    ├── profile.php         # module 2 : IDOR
-    ├── messages.php        # module 2 : IDOR
-    ├── search.php          # module 3 : XSS reflétée
-    ├── post.php            # module 4 : XSS stockée
-    ├── admin/index.php     # module 5 : contrôle d'accès cassé
-    ├── flags.php           # soumission des flags + progression
-    └── reset.php           # remise à zéro de la base
+    ├── index.php           # news feed
+    ├── login.php           # module 1: SQL injection + weak authentication
+    ├── profile.php         # module 2: IDOR
+    ├── messages.php        # module 2: IDOR
+    ├── search.php          # module 3: reflected XSS
+    ├── post.php            # module 4: stored XSS
+    ├── admin/index.php     # module 5: broken access control
+    ├── flags.php           # flag submission + progress
+    └── reset.php           # database reset
 ```
 
-## Règles de code
+## Code rules
 
-- Tout code volontairement vulnérable est marqué :
+- All the app is in English: page text, code comments, seed data, docs.
+- All intentionally vulnerable code is marked:
   `// VULN: <type> - level <easy|medium|hard>`
-- Ne jamais corriger ni "sécuriser" un code marqué `VULN`, sauf demande explicite.
-- Le niveau de difficulté est stocké uniquement en session (`$_SESSION['level']`,
-  `easy` par défaut). Une seule fonction `get_level()` le lit. Pas de table `config`.
-- Chaque module choisit son comportement avec `switch (get_level())`.
-- Mots de passe en MD5 sans sel pour tous les comptes (volontaire, à documenter).
-- XSS : le flag est dans un cookie non HttpOnly, pour qu'il faille réellement
-  exécuter du JavaScript pour le récupérer.
-- Uniquement des données factices : jamais de vrais secrets ni de vraies données.
-- Les flags ne doivent jamais être lisibles par l'utilisateur MySQL de l'application
-  vulnérable, et jamais écrits en clair dans `db/` ni dans le code. Ils dérivent de
-  `FLAG_SECRET` (dans `.env`).
-- Aucune dépendance ajoutée sans me le dire d'abord.
+- Never fix or "secure" code marked `VULN`, unless explicitly asked.
+- The difficulty level is stored only in the session (`$_SESSION['level']`,
+  `easy` by default). A single function `get_level()` reads it. No `config` table.
+- Each module picks its behavior with `switch (get_level())`.
+- Unsalted MD5 passwords for all accounts (intentional, to be documented).
+- XSS: the flag is in a non-HttpOnly cookie, so JavaScript must really run
+  to get it.
+- Fake data only: never real secrets or real data.
+- Flags must never be readable by the vulnerable app's MySQL user, and never
+  written in plain text in `db/` or in the code. They derive from
+  `FLAG_SECRET` (in `.env`).
+- No dependency added without telling me first.
 
-## Règles Docker
+## Docker rules
 
-- Port publié uniquement sur la boucle locale : `127.0.0.1:8080:80`, jamais `8080:80`.
-- La base MySQL n'est pas publiée sur l'hôte (accessible seulement depuis `web`).
-- Identifiants et `FLAG_SECRET` dans `.env` (ignoré). `.env.example` est commité
-  avec des valeurs bidon.
-- La base doit pouvoir être remise à zéro : `reset.php` (POST uniquement, avec
-  confirmation) ou `docker compose down -v`.
+- Port published on loopback only: `127.0.0.1:8080:80`, never `8080:80`.
+- The MySQL database is not published on the host (reachable only from `web`).
+- Credentials and `FLAG_SECRET` in `.env` (ignored). `.env.example` is committed
+  with dummy values.
+- The database must be resettable: `reset.php` (POST only, with
+  confirmation) or `docker compose down -v`.
 
-## Workflow Git
+## Git workflow
 
-- `main` = versions fonctionnelles uniquement. `dev` = branche d'intégration.
-- Ne jamais commiter ni pousser directement sur `main` ou `dev` (protégées : tout passe par une PR).
-- Une branche par tâche de `docs/PLAN.md`, créée depuis `dev` : `feature/`, `fix/`, `docs/`, `chore/`.
-- PR de la tâche vers `dev` en Squash and merge.
-- `dev` -> `main` uniquement à une release, quand tout fonctionne, en merge commit (pas de squash).
-- Commits au format Conventional Commits : `type(zone): description`.
-- Petits commits, un changement logique chacun.
-- Ne jamais utiliser `git push --force` ni `git reset --hard` sans me demander.
+- `main` = working releases only. `dev` = integration branch.
+- Never commit or push directly to `main` or `dev` (protected: everything goes through a PR).
+- One branch per task in `docs/PLAN.md`, created from `dev`: `feature/`, `fix/`, `docs/`, `chore/`.
+- Task PR into `dev` with Squash and merge.
+- `dev` -> `main` only at a release, when everything works, as a merge commit (no squash).
+- Commits in Conventional Commits format: `type(scope): description`.
+- Small commits, one logical change each.
+- Never use `git push --force` or `git reset --hard` without asking me.
 
-## Façon de travailler
+## How to work
 
-- Propose un plan avant d'écrire du code.
-- Une tâche à la fois, en expliquant ce que tu changes.
-- Ne touche pas aux fichiers hors de la tâche demandée.
-- Avant de conclure : l'application démarre et je peux tester à la main.
-- Je veux trouver les failles moi-même : ne me donne pas les exploits, sauf si je le demande.
-- Les writeups sont écrits par moi. Tu peux préparer le squelette, jamais le contenu.
-- Quand je ne comprends pas, réexplique plus simplement, avec un exemple concret.
+- Propose a plan before writing code.
+- One task at a time, explaining what you change.
+- Do not touch files outside the requested task.
+- Before wrapping up: the app starts and I can test it by hand.
+- I want to find the vulnerabilities myself: do not give me the exploits, unless I ask.
+- Writeups are written by me. You may prepare the skeleton, never the content.
+- When I don't understand, explain again more simply, with a concrete example.
 
-## Agents (appelés depuis la session principale, ils ne s'appellent pas entre eux)
+## Agents (called from the main session, they don't call each other)
 
-- Design d'un module, plan -> mode plan de la session principale
-- Implémentation d'une tâche -> `codeur`
-- Tâche répétitive sans décision -> `mecanique`
-- Contrôle des niveaux après chaque module -> `testeur`
-- Relecture critique -> `conseiller`
+- Module design, plan -> plan mode in the main session
+- Implementing a task -> `coder`
+- Repetitive task with no decision -> `mechanic`
+- Checking the levels after each module -> `tester`
+- Critical review -> `advisor`
 
-Moments obligatoires pour le `conseiller` :
-1. Avant de coder le premier module (design des 3 niveaux).
-2. Après le premier module terminé.
-3. Avant la release v0.1.0.
+Mandatory moments for the `advisor`:
+1. Before coding the first module (design of the 3 levels).
+2. After the first module is done.
+3. Before the v0.1.0 release.
 
-Escalade :
-- 2 échecs avec `mecanique` -> `codeur`.
-- `testeur` répond RÉSISTE sur easy ou EXPLOITABLE sur hard -> la tâche n'est pas terminée.
+Escalation:
+- 2 failures with `mechanic` -> `coder`.
+- `tester` answers RESISTS on easy or EXPLOITABLE on hard -> the task is not done.
 
-## Commandes
+## Commands
 
-- Config : `cp .env.example .env` puis changer les valeurs.
-- Build + lancement : `docker compose up --build -d`, puis http://127.0.0.1:8080
-- Logs : `docker compose logs -f web` (ou `db`)
-- Arrêt : `docker compose down`
-- Remise à zéro complète de la base : `docker compose down -v`
+- Config: `cp .env.example .env` then change the values.
+- Build + start: `docker compose up --build -d`, then http://127.0.0.1:8080
+- Logs: `docker compose logs -f web` (or `db`)
+- Stop: `docker compose down`
+- Full database reset: `docker compose down -v`
 
-## Mise à jour de ce fichier
+## Updating this file
 
-À la fin de la roadmap, vérifier que les commandes et l'arborescence reflètent
-la réalité.
+At the end of the roadmap, check that the commands and the tree match
+reality.
