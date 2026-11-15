@@ -227,3 +227,9 @@ select:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 /* Module 2: profile and messages */
 pre.raw { border: 1px solid var(--dim); padding: 10px 14px; white-space: pre-wrap; max-width: 110ch; }
 .members { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 18px; }
+
+/* module 3: search */
+.search-form { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; margin: 14px 0 6px; }
+.search-form label { color: var(--accent); }
+.search-form input[type=text] { flex: 1 1 260px; min-width: 200px; }
+.search-term { margin: 14px 0; }
