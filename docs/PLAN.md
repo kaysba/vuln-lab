@@ -1,6 +1,7 @@
 # Plan vuln-lab
 
-Une branche = une PR vers `main` = Squash and merge. Jamais de commit direct sur `main`.
+Une branche = une PR vers `dev` = Squash and merge. `dev` -> `main` à la release
+(merge commit). Jamais de commit direct sur `main` ni sur `dev`.
 Les writeups sont écrits par moi (voir `docs/writeups/TEMPLATE.md`).
 
 ## Décisions validées
@@ -48,7 +49,8 @@ Les writeups sont écrits par moi (voir `docs/writeups/TEMPLATE.md`).
 - [ ] `feature/xss-stored-posts` : module 4. Puis `docs/writeup-xss-stored`.
 - [ ] `feature/admin-access-control` : module 5. Puis `docs/writeup-admin-access`.
 - [ ] `docs/update-claude-md` : commandes réelles dans CLAUDE.md et README, captures d'écran.
-- [ ] Release `v0.1.0` : clone propre, `docker compose up`, checklist, tag et notes GitHub.
+- [ ] Release `v0.1.0` : clone propre, `docker compose up`, checklist, PR `dev` -> `main`,
+      tag et notes GitHub.
 
 Après chaque module : `testeur` (niveaux), puis commit. Le `conseiller` relit avant
 le premier module, après le premier module, et avant la release.

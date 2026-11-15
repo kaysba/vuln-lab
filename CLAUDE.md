@@ -76,8 +76,11 @@ vuln-lab/
 
 ## Workflow Git
 
-- Ne jamais commiter ni pousser sur `main` (protégée : tout passe par une PR).
-- Une branche par tâche de `docs/PLAN.md` : `feature/`, `fix/`, `docs/`, `chore/`.
+- `main` = versions fonctionnelles uniquement. `dev` = branche d'intégration.
+- Ne jamais commiter ni pousser directement sur `main` ou `dev` (protégées : tout passe par une PR).
+- Une branche par tâche de `docs/PLAN.md`, créée depuis `dev` : `feature/`, `fix/`, `docs/`, `chore/`.
+- PR de la tâche vers `dev` en Squash and merge.
+- `dev` -> `main` uniquement à une release, quand tout fonctionne, en merge commit (pas de squash).
 - Commits au format Conventional Commits : `type(zone): description`.
 - Petits commits, un changement logique chacun.
 - Ne jamais utiliser `git push --force` ni `git reset --hard` sans me demander.
