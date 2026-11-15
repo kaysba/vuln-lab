@@ -14,5 +14,6 @@ $nbUsers = (int) db()->query('SELECT COUNT(*) FROM users')->fetch_row()[0];
     <p><strong>Attention :</strong> application volontairement vulnérable, usage local uniquement. Ne jamais l'exposer sur Internet.</p>
     <p>Version PHP : <?php echo phpversion(); ?></p>
     <p>Base de données : connectée (<?php echo $nbUsers; ?> utilisateurs)</p>
+    <p><a href="reset.php">Remettre la base à zéro</a></p>
 </body>
 </html>
