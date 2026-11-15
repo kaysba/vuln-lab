@@ -46,7 +46,7 @@ Writeups are written by me (see `docs/writeups/TEMPLATE.md`).
       global selector. Validation: the chosen level persists during the session.
 - [x] `feature/flags-progress`: `flags.php` + progress page.
       Validation: a valid flag is marked solved, a wrong one is rejected.
-- [ ] `feature/auth-login-sqli`: module 1, 3 levels. Then `docs/writeup-login-sqli`.
+- [x] `feature/auth-login-sqli`: module 1, 3 levels. Then `docs/writeup-login-sqli`.
 - [ ] `feature/idor-profile-messages`: module 2. Then `docs/writeup-idor`.
 - [ ] `feature/xss-reflected-search`: module 3. Then `docs/writeup-xss-reflected`.
 - [ ] `feature/xss-stored-posts`: module 4. Then `docs/writeup-xss-stored`.
