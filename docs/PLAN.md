@@ -41,7 +41,7 @@ Writeups are written by me (see `docs/writeups/TEMPLATE.md`).
       Validation: tables populated, the app user reads no flag.
 - [x] `feature/reset-db`: `reset.php` (POST + confirmation).
       Validation: after changing data, the reset restores the initial state.
-- [ ] `feature/layout-and-level`: header, footer, sober dark CSS, `config/level.php`,
+- [x] `feature/layout-and-level`: header, footer, sober dark CSS, `config/level.php`,
       global selector. Validation: the chosen level persists during the session.
 - [ ] `feature/flags-progress`: `flags.php` + progress page.
       Validation: a valid flag is marked solved, a wrong one is rejected.
