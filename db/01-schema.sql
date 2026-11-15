@@ -1,12 +1,12 @@
--- Schéma vuln-lab. Exécuté par l'entrypoint MySQL dans la base MYSQL_DATABASE.
--- Aucun flag ici : ils sont calculés par PHP (voir docs/PLAN.md).
+-- vuln-lab schema. Run by the MySQL entrypoint inside the MYSQL_DATABASE database.
+-- No flags here: they are computed by PHP (see docs/PLAN.md).
 SET NAMES utf8mb4;
 
 CREATE TABLE users (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT,
   username VARCHAR(50) NOT NULL,
   email VARCHAR(100) NOT NULL,
-  password CHAR(32) NOT NULL COMMENT 'MD5 hex sans sel (volontaire)',
+  password CHAR(32) NOT NULL COMMENT 'unsalted MD5 hex (intentional)',
   role ENUM('user','admin') NOT NULL DEFAULT 'user',
   bio TEXT,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -47,7 +47,7 @@ CREATE TABLE messages (
   CONSTRAINT fk_messages_recipient FOREIGN KEY (recipient_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Progression uniquement : aucune colonne pour un flag.
+-- Progress only: no column for a flag.
 CREATE TABLE progress (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT,
   module VARCHAR(50) NOT NULL,

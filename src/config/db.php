@@ -1,5 +1,5 @@
 <?php
-// Connexion MySQL unique (mysqli). Pas de code vulnérable ici.
+// Single MySQL connection (mysqli). No vulnerable code here.
 function db(): mysqli
 {
     static $conn = null;
@@ -17,7 +17,7 @@ function db(): mysqli
 
     if ($conn->connect_errno) {
         http_response_code(500);
-        exit('Base de données indisponible');
+        exit('Database unavailable');
     }
 
     $conn->set_charset('utf8mb4');
