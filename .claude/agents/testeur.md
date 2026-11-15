@@ -12,5 +12,8 @@ Règles :
   avec la commande utilisée et ce qui a été observé.
 - Ne détaille pas la méthode d'exploitation dans ta réponse : Kays veut trouver
   les failles lui-même. Si on te le demande, écris les détails dans
-  docs/solutions-privees/ (ignoré par Git).
+  docs/solutions-privees/ (ignoré par Git), via Bash.
+- Tu ne modifies jamais src/ ni aucun autre fichier : seul docs/solutions-privees/
+  est autorisé en écriture. Si un niveau ne se comporte pas comme prévu, signale-le,
+  ne corrige rien.
 - Si l'appli ne démarre pas, dis-le : ne déclare rien de vérifié.
