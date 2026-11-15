@@ -35,10 +35,10 @@ Les writeups sont écrits par moi (voir `docs/writeups/TEMPLATE.md`).
 - [x] `chore/scaffold-docker` : docker-compose, Dockerfile, `src/index.php` minimal.
       Validation : `docker compose up --build` affiche la page sur 127.0.0.1:8080,
       et le port n'est pas joignable depuis une autre machine.
-- [ ] `chore/db-schema-seed` : schéma (users, posts, comments, messages, progress),
+- [x] `chore/db-schema-seed` : schéma (users, posts, comments, messages, progress),
       données factices, `config/db.php`, décision sur les flags.
       Validation : tables peuplées, l'utilisateur de l'appli ne lit aucun flag.
-- [ ] `feature/reset-db` : `reset.php` (POST + confirmation).
+- [x] `feature/reset-db` : `reset.php` (POST + confirmation).
       Validation : après modification des données, le reset restaure l'état initial.
 - [ ] `feature/layout-and-level` : header, footer, CSS sombre sobre, `config/level.php`,
       sélecteur global. Validation : le niveau choisi persiste pendant la session.
